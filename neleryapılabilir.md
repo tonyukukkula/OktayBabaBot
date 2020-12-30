@@ -1,5 +1,5 @@
-* etkinlik oluşturucu api
-* etkinlik görüntüleme
-* güvenlik
-* yönetici tanımlanması veya herkesin kodu kendi sunucusuna kopyalayıp kendine adminlik vermesi.
+* [ ] Etkinlik oluşturucu api
+* [ ] Etkinlik görüntüleme
+* [ ] Güvenlik
+* [ ] Yönetici tanımlanması veya herkesin kodu kendi sunucusuna kopyalayıp kendine adminlik vermesi.
 
