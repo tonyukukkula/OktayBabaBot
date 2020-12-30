@@ -61,14 +61,63 @@ bot.onText(/\/kayıt (.+)/, function (msg, match) {
     if(obje.length == 5){
         data.name = obje.slice(0, 3)[0]+ " " + obje.slice(0, 3)[1];
         data.surname = obje.slice(0, 3)[2];
-        data.e_posta=obje[3];
-        data.telefon=obje[4];
+
+        if(obje[3].includes('@')){
+            if(obje[2].endsWith('.com') || obje[2].endsWith('.net')){
+                data.e_posta=obje[3];
+            }else{
+                bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+            }
+
+        }else{
+            bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        }
+
+       
+
+        // telefon
+        if(obje[4].length == 11){
+            if(obje[4].search('05') == 0){
+                data.telefon=obje[4];
+            }
+        }else if(obje[4].length== 10){
+            if(obje[4].search('5') == 0){
+                data.telefon=obje[4];
+            }
+        }else{
+            bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+        }
+
     } //2ismi var demektir  
     else if(obje.length == 4){
         data.name = obje.slice(0, 2)[0];
         data.surname = obje.slice(0, 2)[1];
-        data.e_posta=obje[2];
-        data.telefon=obje[3];
+
+        // mail
+        if(obje[2].includes('@')){
+            if(obje[2].endsWith('.com') || obje[2].endsWith('.net')){
+                data.e_posta=obje[2];
+            }else{
+                bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+            }
+
+        }else{
+            bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        }
+
+
+        // telefon
+        if(obje[3].length == 11){
+            if(obje[3].search('05') == 0){
+                data.telefon=obje[3];
+            }
+        }else if(obje[3].length== 10){
+            if(obje[3].search('5') == 0){
+                data.telefon=obje[3];
+            }
+        }else{
+            bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+        }
     } // tek ismi var demektir
     var kayit_element=JSON.stringify(data);
     fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
