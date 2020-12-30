@@ -49,7 +49,6 @@ bot.onText(/\/tekrar (.+)/, function (msg, match) {
     setTimeout(() => { bot.sendMessage(chatId, 'bana bunu neden dedirttin olm'); }, 1900, 'funky');
 });
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
-    //"Tonyukuk-Alperen-Kula alpkut55@gmail.com 05453701824"
     var chatId = msg.chat.id;
     var bilgiler = match[1];
     var obje = bol(bilgiler);
@@ -72,9 +71,6 @@ bot.onText(/\/kayıt (.+)/, function (msg, match) {
         data.telefon=obje[3];
     } // tek ismi var demektir
     var kayit_element=JSON.stringify(data);
-    
-
-
     fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
         if (err) {
             bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
@@ -82,7 +78,6 @@ bot.onText(/\/kayıt (.+)/, function (msg, match) {
             console.log("JSON file has been saved.");
             bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
         }
-
     });
 });
 bot.onText(/\/etkinlik/, function (msg) {
