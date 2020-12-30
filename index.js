@@ -7,7 +7,14 @@ function bol(str) {
     var isim_soyisim = str.split(/\s+/);
     return isim_soyisim;
 }
-
+function hataKontrol(durum, chatId) {
+    if (durum == 1)
+        bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+    else if (durum == 2)
+        bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+    else if (durum == 3)
+        bot.sendMessage(chatId, "Hem Telefon numarasını, hem mail adresini yanlış girdiniz, yok size kayıt.");
+}
 bot.onText(/\/komutlar/, function (msg) {
     var chatId = msg.chat.id;
     var yardım = "Komut Listesi==>\n" +
@@ -46,7 +53,7 @@ bot.onText(/\/ezanan/, function (msg) {
     var url = 'https://ezanvakti.herokuapp.com/vakitler?ilce=9206';
     var icerik, res;
     request(url, function (error, response, body) {
-        res = JSON.parse(body); 
+        res = JSON.parse(body);
         icerik = 'hicri  : ' + res[0].HicriTarihUzun +
             '\nimsak  : ' + res[0].Imsak +
             '\ngüneş  : ' + res[0].Gunes +
@@ -54,7 +61,7 @@ bot.onText(/\/ezanan/, function (msg) {
             '\nikindi : ' + res[0].Ikindi +
             '\nakşam  : ' + res[0].Aksam +
             '\nyatsı  : ' + res[0].Yatsi;
-            bot.sendMessage(chatId, icerik);
+        bot.sendMessage(chatId, icerik);
     });
     bot.sendMessage(chatId, "Allah kabul etsin gülüm", { reply_to_message_id: msg.message_id });
 });
@@ -67,83 +74,83 @@ bot.onText(/\/tekrar (.+)/, function (msg, match) {
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     var chatId = msg.chat.id;
     var bilgiler = match[1];
+    var durum = 0; //0= başlangıç durumu 1 yanlış mail, 2 yanlış e posta 3 hem yanlış e posta hem yanlış telefon
     var obje = bol(bilgiler);
-    data={
+    data = {
         name: "isim",
         surname: "soyisim",
         e_posta: "bolum",
         telefon: "mail"
     };
-    if(obje.length == 5){
-        data.name = obje.slice(0, 3)[0]+ " " + obje.slice(0, 3)[1];
+    if (obje.length == 5) {
+        data.name = obje.slice(0, 3)[0] + " " + obje.slice(0, 3)[1];
         data.surname = obje.slice(0, 3)[2];
 
-        if(obje[3].includes('@')){
-            if(obje[2].endsWith('.com') || obje[2].endsWith('.net')){
-                data.e_posta=obje[3];
-            }else{
-                bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        if (obje[3].includes('@')) {
+            if (obje[2].endsWith('.com') || obje[2].endsWith('.net')) {
+                data.e_posta = obje[3];
+            } else {
+                durum += 1;
             }
 
-        }else{
-            bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        } else {
+            durum += 1;
         }
-
-       
-
         // telefon
-        if(obje[4].length == 11){
-            if(obje[4].search('05') == 0){
-                data.telefon=obje[4];
+        if (obje[4].length == 11) {
+            if (obje[4].search('05') == 0) {
+                data.telefon = obje[4];
             }
-        }else if(obje[4].length== 10){
-            if(obje[4].search('5') == 0){
-                data.telefon=obje[4];
+        } else if (obje[4].length == 10) {
+            if (obje[4].search('5') == 0) {
+                data.telefon = obje[4];
             }
-        }else{
-            bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+        } else {
+            durum += 2;
         }
 
     } //2ismi var demektir  
-    else if(obje.length == 4){
+    else if (obje.length == 4) {
         data.name = obje.slice(0, 2)[0];
         data.surname = obje.slice(0, 2)[1];
 
         // mail
-        if(obje[2].includes('@')){
-            if(obje[2].endsWith('.com') || obje[2].endsWith('.net')){
-                data.e_posta=obje[2];
-            }else{
-                bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        if (obje[2].includes('@')) {
+            if (obje[2].endsWith('.com') || obje[2].endsWith('.net')) {
+                data.e_posta = obje[2];
+            } else {
+                durum += 1;
             }
 
-        }else{
-            bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        } else {
+            durum += 1;
         }
 
 
         // telefon
-        if(obje[3].length == 11){
-            if(obje[3].search('05') == 0){
-                data.telefon=obje[3];
+        if (obje[3].length == 11) {
+            if (obje[3].search('05') == 0) {
+                data.telefon = obje[3];
             }
-        }else if(obje[3].length== 10){
-            if(obje[3].search('5') == 0){
-                data.telefon=obje[3];
+        } else if (obje[3].length == 10) {
+            if (obje[3].search('5') == 0) {
+                data.telefon = obje[3];
             }
-        }else{
-            bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+        } else {
+            durum += 2;
         }
     } // tek ismi var demektir
-    var kayit_element=JSON.stringify(data);
-    fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
-        if (err) {
-            bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
-        } else {
-            console.log("JSON file has been saved.");
-            bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
-        }
-    });
+    if (data.telefon != "mail" || data.e_posta != "bolum") {
+        var kayit_element = JSON.stringify(data);
+        fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
+            if (err) {
+                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
+            } else {
+                console.log("JSON file has been saved.");
+                bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
+            }
+        });
+    } else { hataKontrol(durum, chatId); bot.sendMessage(chatId, "Eline sağlık diyemiyorum, kayıt TAMAMLANAMADI"); }
 });
 bot.onText(/\/etkinlik/, function (msg) {
     var chatId = msg.chat.id;
