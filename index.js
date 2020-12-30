@@ -3,7 +3,7 @@ var token = '806831852:AAGwTTqWh8nPyoGnfHI2BcZu53i7UwFaGis';
 var bot = new TelegramBot(token, { polling: true });
 var request = require('request');
 var fs = require('fs');
-function bol(str){
+function bol(str) {
     var isim_soyisim = str.split(/\s+/);
     return isim_soyisim;
 }
@@ -11,9 +11,10 @@ function bol(str){
 bot.onText(/\/komutlar/, function (msg) {
     var chatId = msg.chat.id;
     var yardım = "Komut Listesi==>\n" +
-        "Kayıt için /kayıt İsim(ler)-Soyisim-MailAdresi şeklinde kayıt yapabilirsiniz" +
         "/tekrar <<tekrar edilmesi gereken şiy>>\nbu komut ile bota istediğiniz küfrü tekrar ettirebilirsiniz\n" +
         "/etkinlik çok yakında hizmete girecek, apisini yazalım hele\n" +
+        "/kayit komutu ile topluluğa kaydınızı kendi başınıza yapabilirsiniz\n\tkullanımı: İsim Soyisim elektronik@posta.com 0xxxxxxxxxx" +
+        "\n\tya da İsim1 İsim2 Soyisim elektronik@posta.com xxxxxxxxxx\n" +
         "/sa botla selam alıp vermeniz için\n" +
         "/naptın ve /naptin botun halini hatrını sorabilmeniz için\n" +
         "/napıyon botun yaşayıp yaşamadığını sorgulamak için\n" +
@@ -23,24 +24,39 @@ bot.onText(/\/komutlar/, function (msg) {
         "film ile alakalı bir şeyler mi bilmek istiyorsunuz? o zaman sorun yahu!\n" +
         "/filma <<film>> tartışma çok mu derin? bir de bunu dene!\n" +
         "/ezanan ankara günlük ezan saatleri, cumayı kaçırmayalım :)\n";
-    bot.sendMessage(chatId, yardım);
+    const opts = {
+        reply_to_message_id: msg.message_id,
+        reply_markup: JSON.stringify({
+            keyboard: [
+                ['/etkinlik'],
+                ['/sa'],
+                ['/naptın'],
+                ['/napıyon'],
+                ['/hava Ankara'],
+                ['/ezanan'],
+                ['/naptın']
+            ]
+        })
+    };
+    bot.sendMessage(chatId, yardım, opts);
 });
 
 bot.onText(/\/ezanan/, function (msg) {
     var chatId = msg.chat.id;
     var url = 'https://ezanvakti.herokuapp.com/vakitler?ilce=9206';
+    var icerik, res;
     request(url, function (error, response, body) {
-        var res = JSON.parse(body);
-        bot.sendMessage(chatId,
-            'hicri : ' + res[0].HicriTarihUzun +
-            '\n\t\t\timsak : ' + res[0].Imsak +
-            '\n\t\t\t\tgüneş : ' + res[0].Gunes +
-            '\n\t\t\t\t\töğle : ' + res[0].Ogle +
-            '\n\t\t\t\t\tikindi : ' + res[0].Ikindi +
-            '\n\t\t\t\takşam : ' + res[0].Aksam +
-            '\n\t\t\tyatsı : ' + res[0].Yatsi
-        );
+        res = JSON.parse(body); 
+        icerik = 'hicri  : ' + res[0].HicriTarihUzun +
+            '\nimsak  : ' + res[0].Imsak +
+            '\ngüneş  : ' + res[0].Gunes +
+            '\nöğle   : ' + res[0].Ogle +
+            '\nikindi : ' + res[0].Ikindi +
+            '\nakşam  : ' + res[0].Aksam +
+            '\nyatsı  : ' + res[0].Yatsi;
+            bot.sendMessage(chatId, icerik);
     });
+    bot.sendMessage(chatId, "Allah kabul etsin gülüm", { reply_to_message_id: msg.message_id });
 });
 bot.onText(/\/tekrar (.+)/, function (msg, match) {
     var chatId = msg.chat.id;
