@@ -1,3 +1,6 @@
+### Yapılabilecekler
+----
+
 * [ ] Etkinlik oluşturucu API
 * [ ] Etkinlik görüntüleme
 * [ ] Güvenlik
