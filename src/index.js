@@ -1,6 +1,7 @@
 var TelegramBot = require('node-telegram-bot-api');
 var token = '806831852:AAGwTTqWh8nPyoGnfHI2BcZu53i7UwFaGis';
 var bot = new TelegramBot(token, { polling: true });
+
 const { ezanan } = require('./modules/Ezanan');
 const { kayıt } = require('./modules/Kayit');
 const { film, filma } = require('./modules/Filmler');
@@ -10,6 +11,12 @@ const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
 const { admin, quit } = require('./modules/admin');
 
+
+bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
+
+bot.onText(/\/kayıt (.+)/, function (msg, match) {
+    kayıt(bot, msg, match);
+});
 
 bot.onText(/\/komutlar/, function (msg) {
     komutlar(bot, msg);
@@ -43,10 +50,6 @@ bot.onText(/\/naptın/, function (msg) {
     naptın(bot, msg);
 });
 
-bot.onText(/\/kayıt (.+)/, function (msg, match) {
-    kayıt(bot, msg, match);
-});
-
 bot.onText(/\/ezanan/, function (msg) {
     ezanan(bot, msg);
 });
@@ -58,6 +61,7 @@ bot.onText(/\/film (.+)/, function (msg, match) {
 bot.onText(/\/filma (.+)/, function (msg, match) {
     filma(bot, msg, match);
 });
+<<<<<<< HEAD
 
 bot.onText(/\/admin (.+)/, function (msg, match) {
     admin(bot, msg, match);
@@ -76,3 +80,5 @@ bot.onText(/\/event (.+)/, function (msg, match) {
 });
 
 */
+=======
+>>>>>>> b9f5264ff252585bd0cb3b8030b4d7d49172d821

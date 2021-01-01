@@ -3,15 +3,15 @@ function bol(str) {
     var isim_soyisim = str.split(/\s+/);
     return isim_soyisim;
 }
-function hataKontrol(durum, chatId) {
+function hataKontrol(durum, chatId, bot) {
     if (durum == 1)
-        bot.sendMessage(chatId, "Yanlış mail formatı girdiniz.");
+        bot.sendMessage(chatId, "Yanlış mail formatı, düzelterek yeniden deneyiniz.");
     else if (durum == 2)
-        bot.sendMessage(chatId, " Telefon numarasını düzgün giriniz.");
+        bot.sendMessage(chatId, "Telefon numarasını düzelterek yeniden deneyiniz.");
     else if (durum == 3)
         bot.sendMessage(chatId, "Hem Telefon numarasını, hem mail adresini yanlış girdiniz, yok size kayıt.");
 }
-function kayıt(bot, msg, match){
+function kayıt(bot, msg, match) {
     var chatId = msg.chat.id;
     var bilgiler = match[1];
     var durum = 0; //0= başlangıç durumu 1 yanlış mail, 2 yanlış e posta 3 hem yanlış e posta hem yanlış telefon
@@ -19,23 +19,24 @@ function kayıt(bot, msg, match){
     data = {
         name: "isim",
         surname: "soyisim",
-        e_posta: "bolum",
-        telefon: "mail"
+        e_posta: "uygundegil",
+        telefon: "uygundegil"
     };
     if (obje.length == 5) {
         data.name = obje.slice(0, 3)[0] + " " + obje.slice(0, 3)[1];
         data.surname = obje.slice(0, 3)[2];
 
+        //mail
         if (obje[3].includes('@')) {
-            if (obje[2].endsWith('.com') || obje[2].endsWith('.net')) {
+            if (obje[3].endsWith('.com') || obje[3].endsWith('.net')) {
                 data.e_posta = obje[3];
             } else {
                 durum += 1;
             }
-
         } else {
             durum += 1;
         }
+<<<<<<< HEAD
         // telefon
         if(obje[4].length == 10 || obje[4].length == 11 ){
 
@@ -54,6 +55,14 @@ function kayıt(bot, msg, match){
             durum +=2;
         }
         
+=======
+        //telefon
+        if (obje[4].length == 11 && obje[4].search('05') == 0) {
+            data.telefon = obje[4];
+        } else if (obje[4].length == 10 && obje[4].search('5') == 0) {
+            data.telefon = obje[4];
+        } else { durum += 2 }
+>>>>>>> b9f5264ff252585bd0cb3b8030b4d7d49172d821
 
     } //2ismi var demektir  
     else if (obje.length == 4) {
@@ -67,12 +76,19 @@ function kayıt(bot, msg, match){
             } else {
                 durum += 1;
             }
-
         } else {
             durum += 1;
-        }
+        }        
+        // telefon
+        if (obje[3].length == 11 && obje[3].search('05') == 0) {
+            data.telefon = obje[3];
+        } else if (obje[3].length == 10 && obje[3].search('5') == 0) {
+            data.telefon = obje[3];
+        } else { durum += 2 }
 
+    }// tek ismi var demektir
 
+<<<<<<< HEAD
         // telefon
         if(obje[3].length == 10 || obje[3].length == 11 ){
         if (obje[3].length == 11) {
@@ -91,6 +107,9 @@ function kayıt(bot, msg, match){
     }
     } // tek ismi var demektir
     if (data.telefon != "mail" || data.e_posta != "bolum") {
+=======
+    if (/*(data.telefon != "uygundegil" || data.e_posta != "uygundegil") && */durum == 0) {
+>>>>>>> b9f5264ff252585bd0cb3b8030b4d7d49172d821
         var kayit_element = JSON.stringify(data);
         fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
             if (err) {
@@ -100,6 +119,6 @@ function kayıt(bot, msg, match){
                 bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
             }
         });
-    } else { hataKontrol(durum, chatId); bot.sendMessage(chatId, "Eline sağlık diyemiyorum, kayıt TAMAMLANAMADI"); }
+    } else {hataKontrol(durum, chatId, bot);}
 }
-module.exports = {kayıt};
+module.exports = { kayıt };
