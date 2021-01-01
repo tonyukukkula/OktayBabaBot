@@ -37,17 +37,23 @@ function kayıt(bot, msg, match){
             durum += 1;
         }
         // telefon
-        if (obje[4].length == 11) {
-            if (obje[4].search('05') == 0) {
-                data.telefon = obje[4];
+        if(obje[4].length == 10 || obje[4].length == 11 ){
+
+            if (obje[4].length == 11) {
+                if (obje[4].search('05') == 0) {
+                    data.telefon = obje[4];
+                }
+            } else if (obje[4].length == 10) {
+                if (obje[4].search('5') == 0) {
+                    data.telefon = obje[4];
+                }
+            } else {
+                durum += 2;
             }
-        } else if (obje[4].length == 10) {
-            if (obje[4].search('5') == 0) {
-                data.telefon = obje[4];
-            }
-        } else {
-            durum += 2;
+        }else{
+            durum +=2;
         }
+        
 
     } //2ismi var demektir  
     else if (obje.length == 4) {
@@ -68,6 +74,7 @@ function kayıt(bot, msg, match){
 
 
         // telefon
+        if(obje[3].length == 10 || obje[3].length == 11 ){
         if (obje[3].length == 11) {
             if (obje[3].search('05') == 0) {
                 data.telefon = obje[3];
@@ -79,6 +86,9 @@ function kayıt(bot, msg, match){
         } else {
             durum += 2;
         }
+    } else{
+        durum+=2;
+    }
     } // tek ismi var demektir
     if (data.telefon != "mail" || data.e_posta != "bolum") {
         var kayit_element = JSON.stringify(data);

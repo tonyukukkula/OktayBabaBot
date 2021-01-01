@@ -8,6 +8,8 @@ const { tekrar, sa, naptin, napıyon, naptın } = require('./modules/Sohbet');
 const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
+const { admin, quit } = require('./modules/admin');
+
 
 bot.onText(/\/komutlar/, function (msg) {
     komutlar(bot, msg);
@@ -56,3 +58,21 @@ bot.onText(/\/film (.+)/, function (msg, match) {
 bot.onText(/\/filma (.+)/, function (msg, match) {
     filma(bot, msg, match);
 });
+
+bot.onText(/\/admin (.+)/, function (msg, match) {
+    admin(bot, msg, match);
+});
+
+// Admingiller
+
+/*
+
+bot.onText(/\/quit/, function (msg) {
+    quit(bot, msg);
+});
+
+bot.onText(/\/event (.+)/, function (msg, match) {
+    event(bot, msg, match);
+});
+
+*/

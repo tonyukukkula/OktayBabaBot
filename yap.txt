@@ -1,0 +1,15 @@
+yönetici girişi *
+komutları artır
+şifre değiştirme *
+etkinilk bilgileri girme *
+etkinlik bilgileri gösterme
+çıkış yap
+
+etkinlik 
+* adı
+* yeri -online, yüz yüze-
+* gün
+* saati
+* Ek bilgileri - web adresi/ konum-
+* afiş
+
