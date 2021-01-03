@@ -11,8 +11,7 @@ function admin(bot, msg, match) {
     var icerik = bol(parola); //0: şifre, 1: işlem, işlem match.
     
     if (icerik[0] == passwd) {
-        var cvp = 'Admin Girişi başarılı..';
-        bot.sendMessage(chatId, cvp);
+        //var cvp = 'Admin Girişi başarılı..';
         if(icerik[1] == "quit"){
             quit(bot, msg);
         }else if(icerik[1]=="event"){
@@ -22,6 +21,7 @@ function admin(bot, msg, match) {
         }else if(icerik[1]=="yetkiler"){
             yetkiler(bot, msg);
         }
+        //bot.sendMessage(chatId, cvp);
     } else {
         var cvp = 'Geçersiz Parola..';
         bot.sendMessage(chatId, cvp);
@@ -59,7 +59,7 @@ function yetkiler(bot, msg) {
 // telegram arayüzüden yapabiliriz bunu ve kodları biraz daha profesyonelleştirelim.
 function event(bot, msg, match) {
     var chatId = msg.chat.id;
-    var file_path = match[1];
+    var file_path = match;
     var data = bot.getFile(msg.chat.id, file_path);
     var etkinlik = JSON.stringify(data);
 
@@ -81,8 +81,7 @@ function event(bot, msg, match) {
 
 function changePasswd(bot, msg, match) {
     var chatId = msg.chat.id;
-    var yeni = match[1];
-    passwd = yeni;
+    passwd = match;
     bot.sendMessage(chatId, 'Şifre Değiştirildi..');
 }
 
