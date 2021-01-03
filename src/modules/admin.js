@@ -59,7 +59,7 @@ function yetkiler(bot, msg) {
 // telegram arayüzüden yapabiliriz bunu ve kodları biraz daha profesyonelleştirelim.
 function event(bot, msg, match) {
     var chatId = msg.chat.id;
-    var file_path = match[1];
+    var file_path = match;
     var data = bot.getFile(msg.chat.id, file_path);
     var etkinlik = JSON.stringify(data);
 
@@ -81,8 +81,7 @@ function event(bot, msg, match) {
 
 function changePasswd(bot, msg, match) {
     var chatId = msg.chat.id;
-    var yeni = match[1];
-    passwd = yeni;
+    passwd = match;
     bot.sendMessage(chatId, 'Şifre Değiştirildi..');
 }
 
