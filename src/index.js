@@ -9,11 +9,15 @@ const { tekrar, sa, naptin, napıyon, naptın } = require('./modules/Sohbet');
 const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
+const {admin}=require('./modules/admin');
 
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
+});
+bot.onText(/\/admin (.+)/, function (msg, match) {
+    admin(bot, msg, match);
 });
 
 bot.onText(/\/komutlar/, function (msg) {
