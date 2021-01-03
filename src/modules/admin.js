@@ -1,17 +1,15 @@
 const { admins, passwd } = require('./admins');
 var fs = require('fs');
 const {bol} = require('./Kayit');
-const { komutlar } = require('./Komutlar');
-
 
 function admin(bot, msg, match) {
     var chatId = msg.chat.id;
     var parola = match[1];
 // /admin şifre işlem işlem_matchi
     var icerik = bol(parola); //0: şifre, 1: işlem, işlem match.
-    
     if (icerik[0] == passwd) {
-        //var cvp = 'Admin Girişi başarılı..';
+        var cvp = 'Admin Girişi başarılı..';
+        bot.sendMessage(chatId, cvp);
         if(icerik[1] == "quit"){
             quit(bot, msg);
         }else if(icerik[1]=="event"){
@@ -21,7 +19,6 @@ function admin(bot, msg, match) {
         }else if(icerik[1]=="yetkiler"){
             yetkiler(bot, msg);
         }
-        //bot.sendMessage(chatId, cvp);
     } else {
         var cvp = 'Geçersiz Parola..';
         bot.sendMessage(chatId, cvp);
@@ -40,7 +37,6 @@ function yetkiler(bot, msg) {
         "/event Etkinlik ekle\n" +
         "/passwd Parolayı değiştir.\n" +
         "/quit Çıkış yap";
-
     const opts = {
         reply_to_message_id: msg.message_id,
         reply_markup: JSON.stringify({
@@ -53,7 +49,6 @@ function yetkiler(bot, msg) {
     };
     bot.sendMessage(chatId, yardım, opts);
 }
-
 // Etkinlik dosyasını yükle
 // Burası biraz gereksiz gibi geldi,
 // telegram arayüzüden yapabiliriz bunu ve kodları biraz daha profesyonelleştirelim.
@@ -71,18 +66,11 @@ function event(bot, msg, match) {
             bot.sendMessage(chatId, "Etkinlik Eklendi..");
         }
     });
-
-
 };
-
-
-
 // Şifre Değiştir
-
 function changePasswd(bot, msg, match) {
     var chatId = msg.chat.id;
     passwd = match;
     bot.sendMessage(chatId, 'Şifre Değiştirildi..');
 }
-
 module.exports = { admin };
