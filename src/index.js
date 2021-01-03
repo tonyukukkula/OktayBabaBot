@@ -9,13 +9,21 @@ const { tekrar, sa, naptin, napıyon, naptın } = require('./modules/Sohbet');
 const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
+
 const { admin, quit } = require('./modules/admin');
+
+
+const {admin}=require('./modules/admin');
 
 
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
+});
+
+bot.onText(/\/admin (.+)/, function (msg, match) {
+    admin(bot, msg, match);
 });
 
 bot.onText(/\/komutlar/, function (msg) {
@@ -61,7 +69,7 @@ bot.onText(/\/film (.+)/, function (msg, match) {
 bot.onText(/\/filma (.+)/, function (msg, match) {
     filma(bot, msg, match);
 });
-<<<<<<< HEAD
+
 
 bot.onText(/\/admin (.+)/, function (msg, match) {
     admin(bot, msg, match);
@@ -81,4 +89,4 @@ bot.onText(/\/event (.+)/, function (msg, match) {
 
 */
 =======
->>>>>>> b9f5264ff252585bd0cb3b8030b4d7d49172d821
+
