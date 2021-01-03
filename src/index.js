@@ -16,6 +16,7 @@ bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha raha
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
 });
+
 bot.onText(/\/admin (.+)/, function (msg, match) {
     admin(bot, msg, match);
 });
