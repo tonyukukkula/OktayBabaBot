@@ -11,7 +11,7 @@ function hataKontrol(durum, chatId) {
     else if (durum == 3)
         bot.sendMessage(chatId, "Hem Telefon numarasını, hem mail adresini yanlış girdiniz, yok size kayıt.");
 }
-function kayıt(bot, msg, match){
+function kayıt(bot, msg, match) {
     var chatId = msg.chat.id;
     var bilgiler = match[1];
     var durum = 0; //0= başlangıç durumu 1 yanlış mail, 2 yanlış e posta 3 hem yanlış e posta hem yanlış telefon
@@ -37,7 +37,7 @@ function kayıt(bot, msg, match){
             durum += 1;
         }
         // telefon
-        if(obje[4].length == 10 || obje[4].length == 11 ){
+        if (obje[4].length == 10 || obje[4].length == 11) {
 
             if (obje[4].length == 11) {
                 if (obje[4].search('05') == 0) {
@@ -50,10 +50,10 @@ function kayıt(bot, msg, match){
             } else {
                 durum += 2;
             }
-        }else{
-            durum +=2;
+        } else {
+            durum += 2;
         }
-        
+
 
     } //2ismi var demektir  
     else if (obje.length == 4) {
@@ -74,32 +74,38 @@ function kayıt(bot, msg, match){
 
 
         // telefon
-        if(obje[3].length == 10 || obje[3].length == 11 ){
-        if (obje[3].length == 11) {
-            if (obje[3].search('05') == 0) {
-                data.telefon = obje[3];
-            }
-        } else if (obje[3].length == 10) {
-            if (obje[3].search('5') == 0) {
-                data.telefon = obje[3];
+        if (obje[3].length == 10 || obje[3].length == 11) {
+            if (obje[3].length == 11) {
+                if (obje[3].search('05') == 0) {
+                    data.telefon = obje[3];
+                }
+            } else if (obje[3].length == 10) {
+                if (obje[3].search('5') == 0) {
+                    data.telefon = obje[3];
+                }
+            } else {
+                durum += 2;
             }
         } else {
             durum += 2;
         }
-    } else{
-        durum+=2;
-    }
     } // tek ismi var demektir
     if (data.telefon != "mail" || data.e_posta != "bolum") {
-        var kayit_element = JSON.stringify(data);
-        fs.appendFile("student.json", kayit_element + "\n", "utf-8", function (err) {
-            if (err) {
-                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
-            } else {
-                console.log("JSON file has been saved.");
-                bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
-            }
-        });
+        fs.readFile('student.json', function (err, datA) {
+            if (err)
+                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya okumada");
+            var json = JSON.parse(datA);
+            json.push(data);
+            fs.writeFile("student.json", JSON.stringify(json, null, 4), function (err) {
+                if (err) {
+                    bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya yazmada");
+                } else {
+                    console.log("JSON file(student) has been saved.");
+                    bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
+                }
+            });
+        })
     } else { hataKontrol(durum, chatId); bot.sendMessage(chatId, "Eline sağlık diyemiyorum, kayıt TAMAMLANAMADI"); }
 }
-module.exports = {kayıt, bol};
+
+module.exports = { kayıt, bol };

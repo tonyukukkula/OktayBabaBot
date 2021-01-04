@@ -1,1 +1,14 @@
-{"name":"Adım","surname":"Soyad","e_posta":"fake@mail.com","telefon":"05453889919"}
+[
+    {
+        "name": "Denemeisim",
+        "surname": "Denemesoyisim",
+        "e_posta": "Deneme@mail.com",
+        "telefon": "05515515151"
+    },
+    {
+        "name": "Deneme1",
+        "surname": "Deneme1c",
+        "e_posta": "denem1@mail.com",
+        "telefon": "05515515152"
+    }
+]

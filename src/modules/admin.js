@@ -1,15 +1,10 @@
 var { passwd } = require('./admins');
 var fs = require('fs');
 
-ADMIN = {
-    name: "isim",
-    surname: "soyisim",
-    id: "id"
-};
 function idDondur(msg) {
     var sonuc = 0;
     var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
-    if(msg.from.id == obj.ADMINS[msg.from.username].id){
+    if (msg.from.id == obj.ADMINS[msg.from.username].id) {
         sonuc = msg.from.id;
     }
     return sonuc;
@@ -28,31 +23,49 @@ function panel(bot, msg, match) {
             yetkiler(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
-    }
+    }//elseif event
+    //elseif change passwd
 }
-function admin(bot, msg, match) {
-    //duplicated adminleri belirleyip silmek lazım.
-    var obj = require('../admin.json');
-    var chatId = msg.chat.id;
-    if (match[1] == passwd) {
+function yazdirAdminJSON(bot, msg) {
+    ADMIN = {
+        name: "isim",
+        surname: "soyisim",
+        id: "id"
+    };
+    if (msg.from.id != null)
         ADMIN.id = msg.from.id;
+    if (msg.from.first_name != null)
         ADMIN.name = msg.from.first_name;
+    if (msg.from.last_name != null)
         ADMIN.surname = msg.from.last_name;
-        //burada o duplicated metodu gelmeli
-        obj.ADMINS.push(ADMIN);
 
-        var kayit_element = JSON.stringify(obj, null, 4);
-        fs.writeFile("admin.json", kayit_element, "utf-8", function (err) {
+    var chatId = msg.chat.id;
+
+    fs.readFile('admin.json', function (err, data) {
+        if (err)
+            bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya okumada");
+        var json = JSON.parse(data);
+        json.ADMINS.push(ADMIN);
+        fs.writeFile("admin.json", JSON.stringify(json, null, 4), function (err) {
             if (err) {
-                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
-            } else {//buraya else if diyip önceden kayıt yapanın; kayıt yaptıramayacağının denmesi gerek
+                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya yazmada");
+            } else {
                 console.log("JSON file(admin) has been saved.");
-                bot.sendMessage(chatId, "Eline sağlık, ADMİN kaydı tamamlanmıştır");
+                bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
             }
         });
+    })
+}
+
+function admin(bot, msg, match) {
+    var chatId = msg.chat.id;
+    if (match[1] == passwd) {
+        yazdirAdminJSON(bot, msg);
+        //burada o duplicated metodu gelmeli
     } else {
         var cvp = 'Geçersiz Parola..';
         bot.sendMessage(chatId, cvp);
+        //buraya düşmüyor yanlış parolada
     }
 }
 
