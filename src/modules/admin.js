@@ -1,41 +1,34 @@
 var { passwd } = require('./admins');
 var fs = require('fs');
-var data1 = require('../admin.json');
-
-// function idDondur(msg) {
-//     var sonuc = 0;
-//     var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
-//     if (msg.from.id == obj.ADMINS[msg.from.username].id) {
-//         sonuc = msg.from.id;
-//     }
-//     return sonuc;
-// }
-
-function isContains(data, value) {
-    let contains = false;
-    Object.keys(data).some(key => {
-        contains = typeof data[key] === 'object' ? isContains(data[key], value) : data[key] === value;
-        return contains;
-    });
-    return contains;
+//bunda hata var
+function isContains(value) {
+    var hasMatch = false;
+    var json = require('../admin.json');
+    for (var index = 0; index < json.ADMINS.length; ++index) {
+        if (json.ADMINS.id == value) {
+            hasMatch = true;
+            break;
+        }
+    }
+    return hasMatch;
 }
 
 function panel(bot, msg, match) {
     if (match[1] == passwd)
         admin(bot, msg, match);
     else if (match[1] == 'quit') {
-        if (isContains(data1, msg.from.id))
+        if (isContains(msg.from.id))
             quit(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
     }
     else if (match[1] == 'yetkiler') {
-        if (isContains(data1, msg.from.id))
+        if (isContains(msg.from.id))
             yetkiler(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
     } else if (match[1].indexOf('p:') == 0) {
-        if (isContains(data1, msg.from.id)) {
+        if (isContains(msg.from.id)) {
             passwd = match[1].substring(2);
             bot.sendMessage(msg.chat.id, "Şifre değiştirildi.");
         } else {
@@ -75,7 +68,7 @@ function yazdirAdminJSON(bot, msg) {
                 bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya yazmada");
             } else {
                 console.log("JSON file(admin) has been saved.");
-                bot.sendMessage(chatId, "Eline sağlık, kayıt tamamlanmıştır");
+                bot.sendMessage(chatId, "Eline sağlık, admin kaydın tamamlanmıştır");
             }
         });
     })
@@ -84,11 +77,10 @@ function yazdirAdminJSON(bot, msg) {
 function admin(bot, msg, match) {
     var chatId = msg.chat.id;
     if (match[1] == passwd) {
-        if (!isContains(data1, msg.from.id)) {
+        if (!isContains(msg.from.id)) {
             yazdirAdminJSON(bot, msg);
-            bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
         } else {
-            bot.sendMessage(chatId, "Admin girişi başarılı.");
+            bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
         }
     } else {
         var cvp = 'Gardeşim senin amacın ne? ne bi parola giriyon ne bir komut!?';
