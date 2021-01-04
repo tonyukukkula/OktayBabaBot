@@ -1,34 +1,36 @@
 var { passwd } = require('./admins');
 var fs = require('fs');
 //bunda hata var
-function isContains(value) {
-    var hasMatch = false;
-    var json = require('../admin.json');
-    for (var index = 0; index < json.ADMINS.length; ++index) {
-        if (json.ADMINS.id == value) {
-            hasMatch = true;
-            break;
-        }
-    }
-    return hasMatch;
-}
+
+var data = require('../admin.json');
+
+function isContains(data, value) {
+    let contains = false;
+    Object.keys(data).some(key => {
+        contains = typeof data[key] === 'object' ? isContains(data[key], value) : data[key] === value;
+         return contains;
+    });
+    return contains;
+ }
 
 function panel(bot, msg, match) {
     if (match[1] == passwd)
         admin(bot, msg, match);
     else if (match[1] == 'quit') {
-        if (isContains(msg.from.id))
+        if (isContains(data,msg.from.id))
             quit(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
     }
     else if (match[1] == 'yetkiler') {
-        if (isContains(msg.from.id))
+        if (isContains(data,msg.from.id)){
             yetkiler(bot, msg);
-        else
+        }
+        else  {
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
+        }
     } else if (match[1].indexOf('p:') == 0) {
-        if (isContains(msg.from.id)) {
+        if (isContains(data,msg.from.id)) {
             passwd = match[1].substring(2);
             bot.sendMessage(msg.chat.id, "Şifre değiştirildi.");
         } else {
@@ -77,7 +79,7 @@ function yazdirAdminJSON(bot, msg) {
 function admin(bot, msg, match) {
     var chatId = msg.chat.id;
     if (match[1] == passwd) {
-        if (!isContains(msg.from.id)) {
+        if (!isContains(data,msg.from.id)) {
             yazdirAdminJSON(bot, msg);
         } else {
             bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
