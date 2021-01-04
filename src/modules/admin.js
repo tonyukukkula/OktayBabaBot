@@ -2,14 +2,14 @@ var { passwd } = require('./admins');
 var fs = require('fs');
 var data1 = require('../admin.json');
 
-function idDondur(msg) {
-    var sonuc = 0;
-    var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
-    if (msg.from.id == obj.ADMINS[msg.from.username].id) {
-        sonuc = msg.from.id;
-    }
-    return sonuc;
-}
+// function idDondur(msg) {
+//     var sonuc = 0;
+//     var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
+//     if (msg.from.id == obj.ADMINS[msg.from.username].id) {
+//         sonuc = msg.from.id;
+//     }
+//     return sonuc;
+// }
 
 function isContains(data, value) {
     let contains = false;
@@ -24,13 +24,13 @@ function panel(bot, msg, match) {
     if (match[1] == passwd)
         admin(bot, msg, match);
     else if (match[1] == 'quit') {
-        if (msg.from.id == idDondur(msg))
+        if (isContains(data1, msg.from.id))
             quit(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
     }
     else if (match[1] == 'yetkiler') {
-        if (msg.from.id == idDondur(msg))
+        if (isContains(data1, msg.from.id))
             yetkiler(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
@@ -106,14 +106,14 @@ function yetkiler(bot, msg) {
     var chatId = msg.chat.id;
     var yardım = "Komut Listesi==>\n" +
         "/event Etkinlik ekle\n" +
-        "/passwd Parolayı değiştir.\n" +
+        "/panel p: Parolayı değiştir.\n" +
         "/quit Çıkış yap";
     const opts = {
         reply_to_message_id: msg.message_id,
         reply_markup: JSON.stringify({
             keyboard: [
                 ['/event'],
-                ['/passwd'],
+                ['/panel p:'],
                 ['/quit']
             ]
         })
