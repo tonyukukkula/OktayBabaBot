@@ -32,7 +32,7 @@ function filma(bot, msg, match){
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             bot.sendMessage(chatId, film + ' adlı şeyi arıyom ...', { parse_mode: 'Markdown' })
-                .then(function (msg) {
+                .then(function () {
                     var res = JSON.parse(body);
                     if (res.Poster != null) {
                         bot.sendPhoto(chatId, res.Poster,

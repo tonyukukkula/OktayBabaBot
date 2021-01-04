@@ -1,24 +1,55 @@
-const { admins, passwd } = require('./admins');
+var { passwd } = require('./admins');
 var fs = require('fs');
-const {bol} = require('./Kayit');
 
-function admin(bot, msg, match) {
-    var chatId = msg.chat.id;
-    var parola = match[1];
-// /admin şifre işlem işlem_matchi
-    var icerik = bol(parola); //0: şifre, 1: işlem, işlem match.
-    if (icerik[0] == passwd) {
-        var cvp = 'Admin Girişi başarılı..';
-        bot.sendMessage(chatId, cvp);
-        if(icerik[1] == "quit"){
+ADMIN = {
+    name: "isim",
+    surname: "soyisim",
+    id: "id"
+};
+function idDondur(msg) {
+    var sonuc = 0;
+    var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
+    if(msg.from.id == obj.ADMINS[msg.from.username].id){
+        sonuc = msg.from.id;
+    }
+    return sonuc;
+}
+function panel(bot, msg, match) {
+    if (match[1] == passwd)
+        admin(bot, msg, match);
+    else if (match[1] == 'quit') {
+        if (msg.from.id == idDondur(msg))
             quit(bot, msg);
-        }else if(icerik[1]=="event"){
-            event(bot, msg, icerik[2]);
-        }else if(icerik[1]=="passwd"){
-            changePasswd(bot, msg, icerik[2]);
-        }else if(icerik[1]=="yetkiler"){
+        else
+            bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
+    }
+    else if (match[1] == 'yetkiler') {
+        if (msg.from.id == idDondur(msg))
             yetkiler(bot, msg);
-        }
+        else
+            bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
+    }
+}
+function admin(bot, msg, match) {
+    //duplicated adminleri belirleyip silmek lazım.
+    var obj = require('../admin.json');
+    var chatId = msg.chat.id;
+    if (match[1] == passwd) {
+        ADMIN.id = msg.from.id;
+        ADMIN.name = msg.from.first_name;
+        ADMIN.surname = msg.from.last_name;
+        //burada o duplicated metodu gelmeli
+        obj.ADMINS.push(ADMIN);
+
+        var kayit_element = JSON.stringify(obj, null, 4);
+        fs.writeFile("admin.json", kayit_element, "utf-8", function (err) {
+            if (err) {
+                bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
+            } else {//buraya else if diyip önceden kayıt yapanın; kayıt yaptıramayacağının denmesi gerek
+                console.log("JSON file(admin) has been saved.");
+                bot.sendMessage(chatId, "Eline sağlık, ADMİN kaydı tamamlanmıştır");
+            }
+        });
     } else {
         var cvp = 'Geçersiz Parola..';
         bot.sendMessage(chatId, cvp);
@@ -73,4 +104,4 @@ function changePasswd(bot, msg, match) {
     passwd = match;
     bot.sendMessage(chatId, 'Şifre Değiştirildi..');
 }
-module.exports = { admin };
+module.exports = { panel };
