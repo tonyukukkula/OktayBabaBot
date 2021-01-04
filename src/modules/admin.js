@@ -1,5 +1,6 @@
 var { passwd } = require('./admins');
 var fs = require('fs');
+var data1 = require('../admin.json');
 
 function idDondur(msg) {
     var sonuc = 0;
@@ -9,6 +10,16 @@ function idDondur(msg) {
     }
     return sonuc;
 }
+
+function isContains(data, value) {
+    let contains = false;
+    Object.keys(data).some(key => {
+        contains = typeof data[key] === 'object' ? isContains(data[key], value) : data[key] === value;
+        return contains;
+    });
+    return contains;
+}
+
 function panel(bot, msg, match) {
     if (match[1] == passwd)
         admin(bot, msg, match);
@@ -23,8 +34,17 @@ function panel(bot, msg, match) {
             yetkiler(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
+    } else if (match[1].indexOf('p:') == 0) {
+        if (isContains(data1, msg.from.id)) {
+            passwd = match[1].substring(2);
+            bot.sendMessage(msg.chat.id, "Şifre değiştirildi.");
+        } else {
+            bot.sendMessage(msg.chat.id, "Önce admin yetkisine sahip olmalısınız.");
+        }
+    } else {
+        admin(bot, msg, match);
     }//elseif event
-    //elseif change passwd
+
 }
 function yazdirAdminJSON(bot, msg) {
     ADMIN = {
@@ -34,10 +54,14 @@ function yazdirAdminJSON(bot, msg) {
     };
     if (msg.from.id != null)
         ADMIN.id = msg.from.id;
+
     if (msg.from.first_name != null)
         ADMIN.name = msg.from.first_name;
+
     if (msg.from.last_name != null)
         ADMIN.surname = msg.from.last_name;
+    else
+        ADMIN.surname = "tanımsız";
 
     var chatId = msg.chat.id;
 
@@ -60,12 +84,15 @@ function yazdirAdminJSON(bot, msg) {
 function admin(bot, msg, match) {
     var chatId = msg.chat.id;
     if (match[1] == passwd) {
-        yazdirAdminJSON(bot, msg);
-        //burada o duplicated metodu gelmeli
+        if (!isContains(data1, msg.from.id)) {
+            yazdirAdminJSON(bot, msg);
+            bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
+        } else {
+            bot.sendMessage(chatId, "Admin girişi başarılı.");
+        }
     } else {
-        var cvp = 'Geçersiz Parola..';
+        var cvp = 'Gardeşim senin amacın ne? ne bi parola giriyon ne bir komut!?';
         bot.sendMessage(chatId, cvp);
-        //buraya düşmüyor yanlış parolada
     }
 }
 

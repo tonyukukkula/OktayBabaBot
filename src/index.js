@@ -20,12 +20,12 @@ bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha raha
 //     bot.downloadFile(file_id, "/etkinlikkayitlari");
 // }) 
 
-bot.onText(/\/botonte/, function (msg) {
-    var chatId = msg.chat.id;
-    var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
-    var obj1= JSON.stringify(obj.ADMINS['bilgetonyukuk']);
-    bot.sendMessage(chatId, obj1);
-});
+// bot.onText(/\/botonte/, function (msg) {
+//     var chatId = msg.chat.id;
+//     var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
+//     var obj1= JSON.stringify(obj.ADMINS['bilgetonyukuk']);
+//     bot.sendMessage(chatId, obj1);
+// });
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
