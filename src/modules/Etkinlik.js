@@ -1,6 +1,4 @@
 const bol = require('./Kayit');
-var fs = require("fs")
-// var request = require('request');
 var etkinlik_data = require("../etkinlik.json");
 
 function etkinliklerr() {

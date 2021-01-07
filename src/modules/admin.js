@@ -1,8 +1,5 @@
 var { passwd } = require('./admins');
 var fs = require('fs');
-//bunda hata var
-
-
 function isContains(data, value) {
     let contains = false;
     Object.keys(data).some(key => {
