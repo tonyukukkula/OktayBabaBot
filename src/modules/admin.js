@@ -114,24 +114,6 @@ function yetkiler(bot, msg) {
     };
     bot.sendMessage(chatId, yardım, opts);
 }
-// Etkinlik dosyasını yükle
-// Burası biraz gereksiz gibi geldi,
-// telegram arayüzüden yapabiliriz bunu ve kodları biraz daha profesyonelleştirelim.
-function event(bot, msg, match) {
-    var chatId = msg.chat.id;
-    var file_path = match;
-    var data = bot.getFile(msg.chat.id, file_path);
-    var etkinlik = JSON.stringify(data);
-
-    fs.appendFile("etkinlikler.json", etkinlik + "\n", "utf-8", function (err) {
-        if (err) {
-            bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu");
-        } else {
-            console.log("JSON -etkinlik- file has been saved.");
-            bot.sendMessage(chatId, "Etkinlik Eklendi..");
-        }
-    });
-};
 // Şifre Değiştir
 function changePasswd(bot, msg, match) {
     var chatId = msg.chat.id;

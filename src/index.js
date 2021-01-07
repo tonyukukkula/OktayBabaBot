@@ -9,23 +9,17 @@ const { film, filma } = require('./modules/Filmler');
 const { tekrar, sa, naptin, napıyon, naptın } = require('./modules/Sohbet');
 const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
-//const { etkinlik } = require('./modules/Etkinlik');
+const { etkinlik } = require('./modules/Etkinlik');
 const { panel } = require('./modules/admin');
-
+var duplicate = 0;
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
-// bot.onText(/\/etkinlikkaydet (.+)/, function(msg, match) {
-//     var file_id = match[1];
-//     bot.getFile(file_id, [options]);
-//     bot.downloadFile(file_id, "/etkinlikkayitlari");
-// }) 
-
-// bot.onText(/\/botonte/, function (msg) {
-//     var chatId = msg.chat.id;
-//     var obj = JSON.parse(fs.readFileSync('admin.json', 'utf8'));
-//     var obj1= JSON.stringify(obj.ADMINS['bilgetonyukuk']);
-//     bot.sendMessage(chatId, obj1);
-// });
+bot.onText(/\/etkinlik/, function (msg) {
+    if (duplicate != msg.message_id - 1) {
+        etkinlik(bot, msg);
+        duplicate = msg.message_id;
+    }
+})
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
