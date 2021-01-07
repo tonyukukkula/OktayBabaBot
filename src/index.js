@@ -15,10 +15,7 @@ var duplicate = 0;
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
 bot.onText(/\/etkinlik/, function (msg) {
-    if (duplicate != msg.message_id - 1) {
         etkinlik(bot, msg);
-        duplicate = msg.message_id;
-    }
 })
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {
@@ -39,10 +36,6 @@ bot.onText(/\/hava (.+)/, function (msg, match) {
 
 bot.onText(/\/tekrar (.+)/, function (msg, match) {
     tekrar(bot, msg, match);
-});
-
-bot.onText(/\/etkinlik/, function (msg) {
-    etkinlik(bot, msg);
 });
 
 bot.onText(/\/sa/, function (msg) {
