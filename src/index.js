@@ -1,7 +1,6 @@
 var TelegramBot = require('node-telegram-bot-api');
 var token = '806831852:AAGwTTqWh8nPyoGnfHI2BcZu53i7UwFaGis';
 var bot = new TelegramBot(token, { polling: true });
-var fs = require('fs');
 
 const { ezanan } = require('./modules/Ezanan');
 const { kayıt } = require('./modules/Kayit');
@@ -11,11 +10,12 @@ const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
 const { panel } = require('./modules/admin');
-var duplicate = 0;
+
+
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
 bot.onText(/\/etkinlik/, function (msg) {
-        etkinlik(bot, msg);
+    etkinlik(bot, msg);
 })
 
 bot.onText(/\/kayıt (.+)/, function (msg, match) {

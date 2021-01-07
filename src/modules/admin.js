@@ -2,7 +2,6 @@ var { passwd } = require('./admins');
 var fs = require('fs');
 //bunda hata var
 
-var data = require('../admin.json');
 
 function isContains(data, value) {
     let contains = false;
@@ -11,9 +10,10 @@ function isContains(data, value) {
          return contains;
     });
     return contains;
- }
+}
 
 function panel(bot, msg, match) {
+    var data = JSON.parse(fs.readFileSync('admin.json', 'utf-8'));
     if (match[1] == passwd)
         admin(bot, msg, match);
     else if (match[1] == 'quit') {
@@ -37,10 +37,21 @@ function panel(bot, msg, match) {
             bot.sendMessage(msg.chat.id, "Önce admin yetkisine sahip olmalısınız.");
         }
     } else {
-        admin(bot, msg, match);
-    }//elseif event
-
+        var cvp = 'Gardeşim senin amacın ne? ne bi parola giriyon ne bir komut!?';
+        bot.sendMessage(msg.chat.id, cvp);
+    }
 }
+
+function admin(bot, msg) {
+    var data = JSON.parse(fs.readFileSync('admin.json', 'utf-8'));
+    var chatId = msg.chat.id;
+    if (!isContains(data,msg.from.id)) {
+        yazdirAdminJSON(bot, msg);
+    } else {
+        bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
+    }
+}
+
 function yazdirAdminJSON(bot, msg) {
     ADMIN = {
         name: "isim",
@@ -60,10 +71,10 @@ function yazdirAdminJSON(bot, msg) {
 
     var chatId = msg.chat.id;
 
-    fs.readFile('admin.json', function (err, data) {
+    fs.readFile('admin.json', function (err, datA) {
         if (err)
             bot.sendMessage(chatId, "Hay Allah :( bir aksilik oldu dosya okumada");
-        var json = JSON.parse(data);
+        var json = JSON.parse(datA);
         json.ADMINS.push(ADMIN);
         fs.writeFile("admin.json", JSON.stringify(json, null, 4), function (err) {
             if (err) {
@@ -74,20 +85,6 @@ function yazdirAdminJSON(bot, msg) {
             }
         });
     })
-}
-
-function admin(bot, msg, match) {
-    var chatId = msg.chat.id;
-    if (match[1] == passwd) {
-        if (!isContains(data,msg.from.id)) {
-            yazdirAdminJSON(bot, msg);
-        } else {
-            bot.sendMessage(chatId, "Gardeşim daha kaç kere admin olcan?")
-        }
-    } else {
-        var cvp = 'Gardeşim senin amacın ne? ne bi parola giriyon ne bir komut!?';
-        bot.sendMessage(chatId, cvp);
-    }
 }
 
 function quit(bot, msg) {
@@ -108,7 +105,7 @@ function yetkiler(bot, msg) {
             keyboard: [
                 ['/event'],
                 ['/panel p:'],
-                ['/quit']
+                ['/panel quit']
             ]
         })
     };
