@@ -1,8 +1,12 @@
 var request = require('request');
+
+
 function film(bot, msg, match){
+    
     var chatId = msg.chat.id;
     var film = match[1];
     var url = 'http://www.omdbapi.com/?apikey=d361e4d8&t=' + film;
+    
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             bot.sendMessage(chatId, film + ' adlı şeyi arıyom ...', { parse_mode: 'Markdown' })
@@ -25,10 +29,14 @@ function film(bot, msg, match){
         }
     });
 }
+
+
 function filma(bot, msg, match){
+    
     var chatId = msg.chat.id;
     var film = match[1];
     var url = 'http://www.omdbapi.com/?apikey=d361e4d8&t=' + film;
+    
     request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             bot.sendMessage(chatId, film + ' adlı şeyi arıyom ...', { parse_mode: 'Markdown' })
@@ -57,9 +65,11 @@ function filma(bot, msg, match){
                                     '\nÖzeti:\n' + res.Plot +
                                     '\nDaha fazlası için:' + res.Website
                             });
+                        
                     } else { bot.sendMessage(chatId, 'gardaş o niy laa'); bot.sendMessage(chatId, 'bulamadım'); }
                 })
         }
     });
 }
+
 module.exports = {film, filma};
