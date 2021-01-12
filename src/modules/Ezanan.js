@@ -1,8 +1,11 @@
 var request = require('request');
+
+
 function ezanan(bot, msg){
     var chatId = msg.chat.id;
     var url = 'https://ezanvakti.herokuapp.com/vakitler?ilce=9206';
     var icerik, res;
+    
     request(url, function (error, response, body) {
         res = JSON.parse(body);
         icerik = 'hicri  : ' + res[0].HicriTarihUzun +
@@ -14,6 +17,7 @@ function ezanan(bot, msg){
             '\nyatsı  : ' + res[0].Yatsi;
         bot.sendMessage(chatId, icerik);
     });
+    
     bot.sendMessage(chatId, "Allah kabul etsin gülüm", { reply_to_message_id: msg.message_id });
 }
 module.exports = {ezanan};
