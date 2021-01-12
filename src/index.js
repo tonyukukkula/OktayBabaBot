@@ -9,12 +9,9 @@ const { tekrar, sa, naptin, napıyon, naptın } = require('./modules/Sohbet');
 const { komutlar } = require('./modules/Komutlar');
 const { hava } = require('./modules/Hava');
 const { etkinlik } = require('./modules/Etkinlik');
-<<<<<<< HEAD
-const { admin } = require('./modules/admin');
-=======
 const { panel } = require('./modules/admin');
 
->>>>>>> tonyukuk
+
 
 bot.on("polling_error", (msg) => console.log(msg));//hata kaynağını daha rahat çözmek için
 
@@ -26,13 +23,9 @@ bot.onText(/\/kayıt (.+)/, function (msg, match) {
     kayıt(bot, msg, match);
 });
 
-<<<<<<< HEAD
-bot.onText(/\/admin (.+)/, function (msg, match) {
-    admin(bot, msg, match);
-=======
+
 bot.onText(/\/panel (.+)/, function (msg, match) {
     panel(bot, msg, match);
->>>>>>> tonyukuk
 });
 
 bot.onText(/\/komutlar/, function (msg) {
