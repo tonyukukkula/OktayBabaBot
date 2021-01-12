@@ -1,3 +1,5 @@
+// Sohbet Komutları
+
 function tekrar(bot,msg, match){
     var chatId = msg.chat.id;
     var tekrar = match[1];

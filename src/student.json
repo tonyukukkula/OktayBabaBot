@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Denemeisim",
+        "surname": "Denemesoyisim",
+        "e_posta": "Deneme@mail.com",
+        "telefon": "05515515151"
+    },
+    {
+        "name": "Deneme1",
+        "surname": "Deneme1c",
+        "e_posta": "denem1@mail.com",
+        "telefon": "05515515152"
+    },
+    {
+        "name": "Alp",
+        "surname": "Eren",
+        "e_posta": "tonyuku@mail.com",
+        "telefon": "5756299999"
+    }
+]
