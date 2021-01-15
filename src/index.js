@@ -1,5 +1,5 @@
 var TelegramBot = require('node-telegram-bot-api');
-var token = '806831852:AAGwTTqWh8nPyoGnfHI2BcZu53i7UwFaGis';
+var token = 'TelegraBotToken';
 var bot = new TelegramBot(token, { polling: true });
 
 const { ezanan } = require('./modules/Ezanan');
