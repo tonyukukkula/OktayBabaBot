@@ -22,7 +22,7 @@ function panel(bot, msg, match) {
 
     else if (match[1] == 'quit') {
 
-        if (isContains(data,msg.from.id))
+        if (isContains(data,msg.chat.id))
             quit(bot, msg);
         else
             bot.sendMessage(msg.chat.id, "bu komutu kullanabilmek için admin yetkisine sahip olmanız gerekli", { reply_to_message_id: msg.message_id })
@@ -30,7 +30,7 @@ function panel(bot, msg, match) {
 
     else if (match[1] == 'yetkiler') {
 
-        if (isContains(data,msg.from.id)){
+        if (isContains(data,msg.chat.id)){
             yetkiler(bot, msg);
         }
 
@@ -41,7 +41,7 @@ function panel(bot, msg, match) {
     } 
     else if (match[1].indexOf('p:') == 0) {
 
-        if (isContains(data,msg.from.id)) {
+        if (isContains(data,msg.from.id)) {//from.id olmasının sebebi bota özelden yazılmasını sağlamak
             passwd = match[1].substring(2);
             bot.sendMessage(msg.chat.id, "Şifre değiştirildi.");
         } 
@@ -87,7 +87,7 @@ function yazdirAdminJSON(bot, msg) {
     else
         ADMIN.surname = "tanımsız";
 
-    var chatId = msg.chat.id;
+    var chatId = msg.from.id;
 
     fs.readFile('admin.json', function (err, datA) {
 
@@ -129,7 +129,7 @@ function yetkiler(bot, msg) {
 
 // Şifre Değiştir
 function changePasswd(bot, msg, match) {
-    var chatId = msg.chat.id;
+    var chatId = msg.from.id;
     passwd = match;
 
     bot.sendMessage(chatId, 'Şifre Değiştirildi..');
