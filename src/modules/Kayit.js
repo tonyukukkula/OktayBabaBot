@@ -15,6 +15,11 @@ function hataKontrol(durum, chatId) {
         bot.sendMessage(chatId, "Hem Telefon numarasını, hem mail adresini yanlış girdiniz, yok size kayıt.");
 }
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 
 function kayıt(bot, msg, match) {
 
@@ -37,16 +42,9 @@ function kayıt(bot, msg, match) {
         data.name = obje.slice(0, 3)[0] + " " + obje.slice(0, 3)[1];
         data.surname = obje.slice(0, 3)[2];
 
-        if (obje[3].includes('@')) {
-
-            if (obje[2].endsWith('.com') || obje[2].endsWith('.net')) {
-                data.e_posta = obje[3];
-            } 
-            else {
-                durum += 1;
-            }
-
-        } 
+        if (validateEmail(obje[3])){
+            data.e_posta = obje[3]
+        }
         else {
             durum += 1;
         }
@@ -83,16 +81,10 @@ function kayıt(bot, msg, match) {
         data.surname = obje.slice(0, 2)[1];
 
         // mail
-        if (obje[2].includes('@')) {
-
-            if (obje[2].endsWith('.com') || obje[2].endsWith('.net')) {
-                data.e_posta = obje[2];
-            } 
-            else {
-                durum += 1;
-            }
-
-        } else {
+        if (validateEmail(obje[2])){
+            data.e_posta = obje[2]
+        }
+         else {
             durum += 1;
         }
 
